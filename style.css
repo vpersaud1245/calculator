@@ -34,8 +34,8 @@ button {
 }
 
 button {
-  max-height: 60px;
-  max-width: 65px;
+  height: 60px;
+  width: 65px;
   transition: 0.2s;
   border: none;
   background-color: rgb(53, 100, 181);
@@ -44,8 +44,8 @@ button {
 }
 
 button:hover {
-  height: 59.5px;
-  width: 64.5px;
+  height: 57px;
+  width: 62px;
   background-color: rgba(239, 244, 247, 0.5);
 }
 
