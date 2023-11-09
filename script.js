@@ -10,7 +10,11 @@ function operate(num1, num2, operator) {
   } else if (operator == "x") {
     return num1 * num2;
   } else if (operator == "÷") {
-    return num1 / num2;
+    if (num2 == 0) {
+      return "Error";
+    } else {
+      return num1 / num2;
+    }
   }
 }
 
@@ -53,6 +57,7 @@ const equalsButton = document.querySelector("#equals");
 
 equalsButton.addEventListener("click", (e) => {
   secondNumber = parseFloat(lowerDisplay.textContent);
+  console.log(secondNumber);
   lowerDisplay.textContent = "";
   upperDisplay.textContent = "";
   lowerDisplay.textContent = operate(firstNumber, secondNumber, operator);
