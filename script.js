@@ -30,10 +30,13 @@ for (button of numberButtons) {
 for (button of operatorButtons) {
   button.addEventListener("click", (e) => {
     firstNumber = parseFloat(lowerDisplay.textContent);
-    operator = e.target.textContent;
-    console.log(operator);
-    upperDisplay.textContent = `${lowerDisplay.textContent} ${operator}`;
-    lowerDisplay.textContent = "";
+    console.log(firstNumber);
+    if (!isNaN(firstNumber)) {
+      operator = e.target.textContent;
+      console.log(operator);
+      upperDisplay.textContent = `${lowerDisplay.textContent} ${operator}`;
+      lowerDisplay.textContent = "";
+    }
   });
 }
 
