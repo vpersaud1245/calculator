@@ -35,11 +35,20 @@ for (button of numberButtons) {
 
 for (button of operatorButtons) {
   button.addEventListener("click", (e) => {
-    firstNumber = parseFloat(lowerDisplay.textContent);
-    operator = e.target.textContent;
-    if (!isNaN(firstNumber)) {
-      upperDisplay.textContent = `${lowerDisplay.textContent} ${operator}`;
-      lowerDisplay.textContent = "";
+    if (lowerDisplay.textContent != "") {
+      if (operator === undefined || operator == "") {
+        firstNumber = parseFloat(lowerDisplay.textContent);
+        operator = e.target.textContent;
+        upperDisplay.textContent = `${lowerDisplay.textContent} ${operator}`;
+        lowerDisplay.textContent = "";
+      } else if (!(operator === undefined || operator == "")) {
+        firstNumber = parseFloat(upperDisplay.textContent.slice(0, -1));
+        secondNumber = parseFloat(lowerDisplay.textContent);
+        let result = operate(firstNumber, secondNumber, operator);
+        operator = e.target.innerHTML;
+        lowerDisplay.textContent = "";
+        upperDisplay.textContent = `${result} ${operator}`;
+      }
     }
   });
 }
@@ -58,7 +67,10 @@ const equalsButton = document.querySelector("#equals");
 
 equalsButton.addEventListener("click", (e) => {
   secondNumber = parseFloat(lowerDisplay.textContent);
+  console.log(firstNumber);
+  console.log(typeof firstNumber);
   console.log(secondNumber);
+  console.log(typeof secondNumber);
   lowerDisplay.textContent = "";
   upperDisplay.textContent = "";
   lowerDisplay.textContent = operate(firstNumber, secondNumber, operator);
@@ -75,8 +87,13 @@ decimalButton.addEventListener("click", (e) => {
 const deleteButton = document.querySelector("#Delete");
 
 deleteButton.addEventListener("click", (e) => {
-  lowerDisplay.textContent = lowerDisplay.textContent.slice(0, -1);
+  if (lowerDisplay.textContent == "") {
+    lowerDisplay.textContent = upperDisplay.textContent.slice(0, -1);
+    upperDisplay.textContent = "";
+    operator = "";
+  } else if (lowerDisplay.textContent != "") {
+    lowerDisplay.textContent = lowerDisplay.textContent.slice(0, -1);
+  }
 });
 
 // Add keyboard input function
-// Implement continual calculation
