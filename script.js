@@ -70,6 +70,13 @@ decimalButton.addEventListener("click", (e) => {
     lowerDisplay.textContent = `${lowerDisplay.textContent}.`;
   }
 });
-// Add delete function
+
+const deleteButton = document.querySelector("#Delete");
+
+deleteButton.addEventListener("click", (e) => {
+  lowerDisplay.textContent = lowerDisplay.textContent.slice(0, -1);
+});
+
 // Add percent function
 // Add keyboard input function
+// Implement continual calculation
