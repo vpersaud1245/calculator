@@ -15,6 +15,8 @@ function operate(num1, num2, operator) {
     } else {
       return num1 / num2;
     }
+  } else if (operator == "%") {
+    return num1 % num2;
   }
 }
 
@@ -34,9 +36,8 @@ for (button of numberButtons) {
 for (button of operatorButtons) {
   button.addEventListener("click", (e) => {
     firstNumber = parseFloat(lowerDisplay.textContent);
+    operator = e.target.textContent;
     if (!isNaN(firstNumber)) {
-      operator = e.target.textContent;
-      console.log(operator);
       upperDisplay.textContent = `${lowerDisplay.textContent} ${operator}`;
       lowerDisplay.textContent = "";
     }
@@ -77,6 +78,5 @@ deleteButton.addEventListener("click", (e) => {
   lowerDisplay.textContent = lowerDisplay.textContent.slice(0, -1);
 });
 
-// Add percent function
 // Add keyboard input function
 // Implement continual calculation
