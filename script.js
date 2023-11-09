@@ -2,14 +2,6 @@ let firstNumber;
 let secondNumber;
 let operator;
 
-const Operators = Object.freeze({
-  ADD: "+",
-  SUBTRACT: "-",
-  MULTIPLY: "x",
-  DIVIDE: "÷",
-  NONE: "",
-});
-
 function operate(num1, num2, operator) {
   if (operator == "+") {
     return num1 + num2;
@@ -50,7 +42,7 @@ const allClearButton = document.querySelector("#AC");
 allClearButton.addEventListener("click", (e) => {
   firstNumber = 0;
   secondNumber = 0;
-  operator = Operators.NONE;
+  operator = "";
   upperDisplay.textContent = "";
   lowerDisplay.textContent = "";
 });
@@ -63,3 +55,8 @@ equalsButton.addEventListener("click", (e) => {
   upperDisplay.textContent = "";
   lowerDisplay.textContent = operate(firstNumber, secondNumber, operator);
 });
+
+// Add decimal function
+// Add delete function
+// Add percent function
+// Add keyboard input function
