@@ -30,7 +30,6 @@ for (button of numberButtons) {
 for (button of operatorButtons) {
   button.addEventListener("click", (e) => {
     firstNumber = parseFloat(lowerDisplay.textContent);
-    console.log(firstNumber);
     if (!isNaN(firstNumber)) {
       operator = e.target.textContent;
       console.log(operator);
@@ -59,7 +58,13 @@ equalsButton.addEventListener("click", (e) => {
   lowerDisplay.textContent = operate(firstNumber, secondNumber, operator);
 });
 
-// Add decimal function
+const decimalButton = document.querySelector("#decimal");
+
+decimalButton.addEventListener("click", (e) => {
+  if (!lowerDisplay.textContent.includes(".")) {
+    lowerDisplay.textContent = `${lowerDisplay.textContent}.`;
+  }
+});
 // Add delete function
 // Add percent function
 // Add keyboard input function
