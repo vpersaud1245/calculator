@@ -35,20 +35,24 @@ for (button of numberButtons) {
 
 for (button of operatorButtons) {
   button.addEventListener("click", (e) => {
-    if (lowerDisplay.textContent != "") {
-      if (operator === undefined || operator == "") {
-        firstNumber = parseFloat(lowerDisplay.textContent);
-        operator = e.target.textContent;
-        upperDisplay.textContent = `${lowerDisplay.textContent} ${operator}`;
-        lowerDisplay.textContent = "";
-      } else if (!(operator === undefined || operator == "")) {
-        firstNumber = parseFloat(upperDisplay.textContent.slice(0, -1));
-        secondNumber = parseFloat(lowerDisplay.textContent);
-        let result = operate(firstNumber, secondNumber, operator);
-        operator = e.target.innerHTML;
-        lowerDisplay.textContent = "";
-        upperDisplay.textContent = `${result} ${operator}`;
-      }
+    console.log(`first number is ${firstNumber}`);
+    console.log(`second number is ${secondNumber}`);
+    console.log(`operator is ${operator}`);
+    if (
+      lowerDisplay.textContent != "" &&
+      (operator === undefined || operator == "")
+    ) {
+      firstNumber = parseFloat(lowerDisplay.textContent);
+      operator = e.target.textContent;
+      upperDisplay.textContent = `${lowerDisplay.textContent} ${operator}`;
+      lowerDisplay.textContent = "";
+    } else if (!(operator === undefined || operator == "")) {
+      firstNumber = parseFloat(upperDisplay.textContent.slice(0, -1));
+      secondNumber = parseFloat(lowerDisplay.textContent);
+      let result = operate(firstNumber, secondNumber, operator);
+      operator = e.target.innerHTML;
+      lowerDisplay.textContent = "";
+      upperDisplay.textContent = `${result} ${operator}`;
     }
   });
 }
@@ -66,6 +70,7 @@ allClearButton.addEventListener("click", (e) => {
 const equalsButton = document.querySelector("#equals");
 
 equalsButton.addEventListener("click", (e) => {
+  firstNumber = parseFloat(upperDisplay.textContent);
   secondNumber = parseFloat(lowerDisplay.textContent);
   console.log(firstNumber);
   console.log(typeof firstNumber);
@@ -74,6 +79,9 @@ equalsButton.addEventListener("click", (e) => {
   lowerDisplay.textContent = "";
   upperDisplay.textContent = "";
   lowerDisplay.textContent = operate(firstNumber, secondNumber, operator);
+  firstNumber = 0;
+  secondNumber = 0;
+  operator = "";
 });
 
 const decimalButton = document.querySelector("#decimal");
@@ -95,5 +103,3 @@ deleteButton.addEventListener("click", (e) => {
     lowerDisplay.textContent = lowerDisplay.textContent.slice(0, -1);
   }
 });
-
-// Add keyboard input function
