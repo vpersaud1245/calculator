@@ -7,9 +7,9 @@ function operate(num1, num2, operator) {
     return num1 + num2;
   } else if (operator == "-") {
     return num1 - num2;
-  } else if (operator == "x") {
+  } else if (operator == "x" || operator == "*") {
     return num1 * num2;
-  } else if (operator == "÷") {
+  } else if (operator == "÷" || operator == "/") {
     if (num2 == 0) {
       return "Error";
     } else {
@@ -35,9 +35,7 @@ for (button of numberButtons) {
 
 for (button of operatorButtons) {
   button.addEventListener("click", (e) => {
-    console.log(`first number is ${firstNumber}`);
-    console.log(`second number is ${secondNumber}`);
-    console.log(`operator is ${operator}`);
+    console.log(operator);
     if (
       lowerDisplay.textContent != "" &&
       (operator === undefined || operator == "")
@@ -46,7 +44,10 @@ for (button of operatorButtons) {
       operator = e.target.textContent;
       upperDisplay.textContent = `${lowerDisplay.textContent} ${operator}`;
       lowerDisplay.textContent = "";
-    } else if (!(operator === undefined || operator == "")) {
+    } else if (
+      !(operator === undefined || operator == "") &&
+      lowerDisplay.textContent != ""
+    ) {
       firstNumber = parseFloat(upperDisplay.textContent.slice(0, -1));
       secondNumber = parseFloat(lowerDisplay.textContent);
       let result = operate(firstNumber, secondNumber, operator);
@@ -68,38 +69,88 @@ allClearButton.addEventListener("click", (e) => {
 });
 
 const equalsButton = document.querySelector("#equals");
-
-equalsButton.addEventListener("click", (e) => {
+function equalButtonAction(e) {
   firstNumber = parseFloat(upperDisplay.textContent);
   secondNumber = parseFloat(lowerDisplay.textContent);
-  console.log(firstNumber);
-  console.log(typeof firstNumber);
-  console.log(secondNumber);
-  console.log(typeof secondNumber);
   lowerDisplay.textContent = "";
   upperDisplay.textContent = "";
   lowerDisplay.textContent = operate(firstNumber, secondNumber, operator);
   firstNumber = 0;
   secondNumber = 0;
   operator = "";
-});
+}
+equalsButton.addEventListener("click", equalButtonAction);
 
 const decimalButton = document.querySelector("#decimal");
-
-decimalButton.addEventListener("click", (e) => {
+function decimalButtonAction(e) {
   if (!lowerDisplay.textContent.includes(".")) {
     lowerDisplay.textContent = `${lowerDisplay.textContent}.`;
   }
-});
+}
+decimalButton.addEventListener("click", decimalButtonAction);
 
 const deleteButton = document.querySelector("#Delete");
-
-deleteButton.addEventListener("click", (e) => {
+function deleteButtonAction() {
   if (lowerDisplay.textContent == "") {
     lowerDisplay.textContent = upperDisplay.textContent.slice(0, -1);
     upperDisplay.textContent = "";
     operator = "";
   } else if (lowerDisplay.textContent != "") {
     lowerDisplay.textContent = lowerDisplay.textContent.slice(0, -1);
+  }
+}
+deleteButton.addEventListener("click", deleteButtonAction);
+
+const body = document.querySelector("body");
+const buttons = document.querySelectorAll("button");
+function blurButtons() {
+  buttons.forEach((button) => {
+    button.blur();
+  });
+}
+body.addEventListener("keydown", (e) => {
+  console.log(e.key);
+  if (e.key.match(/[0-9]/)) {
+    blurButtons();
+    lowerDisplay.textContent += e.key;
+  }
+  if (e.key == "Enter") {
+    blurButtons();
+    equalButtonAction(e);
+  }
+  if (e.key == "Backspace") {
+    blurButtons();
+    deleteButtonAction();
+  }
+  if (e.key == ".") {
+    decimalButtonAction();
+  }
+  if (
+    e.key == "*" ||
+    e.key == "-" ||
+    e.key == "+" ||
+    e.key == "/" ||
+    e.key == "%"
+  ) {
+    blurButtons();
+    if (
+      lowerDisplay.textContent != "" &&
+      (operator === undefined || operator == "")
+    ) {
+      firstNumber = parseFloat(lowerDisplay.textContent);
+      operator = e.key;
+      upperDisplay.textContent = `${lowerDisplay.textContent} ${operator}`;
+      lowerDisplay.textContent = "";
+    } else if (
+      !(operator === undefined || operator == "") &&
+      lowerDisplay.textContent != ""
+    ) {
+      firstNumber = parseFloat(upperDisplay.textContent.slice(0, -1));
+      secondNumber = parseFloat(lowerDisplay.textContent);
+      let result = operate(firstNumber, secondNumber, operator);
+      operator = e.key;
+      lowerDisplay.textContent = "";
+      upperDisplay.textContent = `${result} ${operator}`;
+    }
   }
 });
