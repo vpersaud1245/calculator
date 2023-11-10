@@ -22,9 +22,7 @@ function operate(num1, num2, operator) {
 
 const numberButtons = document.querySelectorAll(".numberButton");
 const upperDisplay = document.querySelector(".upperDisplay");
-let upperDisplayContent = document.querySelector(".upperDisplay").innerHTML;
 const lowerDisplay = document.querySelector(".lowerDisplay");
-let lowerDisplayContent = document.querySelector(".lowerDisplay").innerHTML;
 const operatorButtons = document.querySelectorAll(".operatorButton");
 
 for (button of numberButtons) {
