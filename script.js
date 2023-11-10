@@ -68,25 +68,27 @@ for (button of operatorButtons) {
 }
 
 const allClearButton = document.querySelector("#AC");
-
-allClearButton.addEventListener("click", (e) => {
+function resetNumberAndOperatorVariables() {
   firstNumber = 0;
   secondNumber = 0;
   operator = "";
+}
+function clearDisplays() {
   upperDisplay.textContent = "";
   lowerDisplay.textContent = "";
+}
+allClearButton.addEventListener("click", (e) => {
+  resetNumberAndOperatorVariables();
+  clearDisplays();
 });
 
 const equalsButton = document.querySelector("#equals");
 function equalButtonAction(e) {
   firstNumber = parseFloat(upperDisplay.textContent);
   secondNumber = parseFloat(lowerDisplay.textContent);
-  lowerDisplay.textContent = "";
-  upperDisplay.textContent = "";
+  clearDisplays();
   lowerDisplay.textContent = operate(firstNumber, secondNumber, operator);
-  firstNumber = 0;
-  secondNumber = 0;
-  operator = "";
+  resetNumberAndOperatorVariables();
 }
 equalsButton.addEventListener("click", equalButtonAction);
 
@@ -138,13 +140,7 @@ body.addEventListener("keydown", (e) => {
   if (keyPressed == ".") {
     decimalButtonAction();
   }
-  if (
-    keyPressed == "*" ||
-    keyPressed == "-" ||
-    keyPressed == "+" ||
-    keyPressed == "/" ||
-    keyPressed == "%"
-  ) {
+  if (["*", "-", "+", "/", "%"].includes(keyPressed)) {
     blurButtons();
     if (
       lowerDisplay.textContent != "" &&
