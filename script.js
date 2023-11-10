@@ -1,6 +1,16 @@
 let firstNumber;
 let secondNumber;
 let operator;
+const numberButtons = document.querySelectorAll(".numberButton");
+const upperDisplay = document.querySelector(".upperDisplay");
+const lowerDisplay = document.querySelector(".lowerDisplay");
+const operatorButtons = document.querySelectorAll(".operatorButton");
+const allClearButton = document.querySelector("#AC");
+const equalsButton = document.querySelector("#equals");
+const decimalButton = document.querySelector("#decimal");
+const deleteButton = document.querySelector("#Delete");
+const body = document.querySelector("body");
+const buttons = document.querySelectorAll("button");
 
 function operate(num1, num2, operator) {
   if (operator == "+") {
@@ -20,11 +30,6 @@ function operate(num1, num2, operator) {
   }
 }
 
-const numberButtons = document.querySelectorAll(".numberButton");
-const upperDisplay = document.querySelector(".upperDisplay");
-const lowerDisplay = document.querySelector(".lowerDisplay");
-const operatorButtons = document.querySelectorAll(".operatorButton");
-
 function displayNumber(e) {
   let numberToDisplay;
   if (e instanceof KeyboardEvent) {
@@ -38,51 +43,46 @@ function displayNumber(e) {
   }
 }
 
-numberButtons.forEach((button) => {
-  button.addEventListener("click", displayNumber);
-});
-
-for (button of operatorButtons) {
-  button.addEventListener("click", (e) => {
-    console.log(operator);
-    if (
-      lowerDisplay.textContent != "" &&
-      (operator === undefined || operator == "")
-    ) {
-      firstNumber = parseFloat(lowerDisplay.textContent);
-      operator = e.target.textContent;
-      upperDisplay.textContent = `${lowerDisplay.textContent} ${operator}`;
-      lowerDisplay.textContent = "";
-    } else if (
-      !(operator === undefined || operator == "") &&
-      lowerDisplay.textContent != ""
-    ) {
-      firstNumber = parseFloat(upperDisplay.textContent.slice(0, -1));
-      secondNumber = parseFloat(lowerDisplay.textContent);
-      let result = operate(firstNumber, secondNumber, operator);
-      operator = e.target.innerHTML;
-      lowerDisplay.textContent = "";
-      upperDisplay.textContent = `${result} ${operator}`;
-    }
-  });
+function handleOperatorInput(e) {
+  let selectedOperator;
+  if (e instanceof KeyboardEvent) {
+    selectedOperator = e.key;
+  } else if (e instanceof PointerEvent) {
+    let operatorButtonValue = e.target.innerHTML;
+    selectedOperator = operatorButtonValue;
+  }
+  if (
+    lowerDisplay.textContent != "" &&
+    (operator === undefined || operator == "")
+  ) {
+    firstNumber = parseFloat(lowerDisplay.textContent);
+    operator = selectedOperator;
+    upperDisplay.textContent = `${lowerDisplay.textContent} ${operator}`;
+    lowerDisplay.textContent = "";
+  } else if (
+    !(operator === undefined || operator == "") &&
+    lowerDisplay.textContent != ""
+  ) {
+    firstNumber = parseFloat(upperDisplay.textContent.slice(0, -1));
+    secondNumber = parseFloat(lowerDisplay.textContent);
+    let result = operate(firstNumber, secondNumber, operator);
+    operator = selectedOperator;
+    lowerDisplay.textContent = "";
+    upperDisplay.textContent = `${result} ${operator}`;
+  }
 }
 
-const allClearButton = document.querySelector("#AC");
+function clearDisplays() {
+  upperDisplay.textContent = "";
+  lowerDisplay.textContent = "";
+}
+
 function resetNumberAndOperatorVariables() {
   firstNumber = 0;
   secondNumber = 0;
   operator = "";
 }
-function clearDisplays() {
-  upperDisplay.textContent = "";
-  lowerDisplay.textContent = "";
-}
-allClearButton.addEventListener("click", (e) => {
-  resetNumberAndOperatorVariables();
-  clearDisplays();
-});
 
-const equalsButton = document.querySelector("#equals");
 function equalButtonAction(e) {
   firstNumber = parseFloat(upperDisplay.textContent);
   secondNumber = parseFloat(lowerDisplay.textContent);
@@ -90,17 +90,13 @@ function equalButtonAction(e) {
   lowerDisplay.textContent = operate(firstNumber, secondNumber, operator);
   resetNumberAndOperatorVariables();
 }
-equalsButton.addEventListener("click", equalButtonAction);
 
-const decimalButton = document.querySelector("#decimal");
 function decimalButtonAction(e) {
   if (!lowerDisplay.textContent.includes(".")) {
     lowerDisplay.textContent = `${lowerDisplay.textContent}.`;
   }
 }
-decimalButton.addEventListener("click", decimalButtonAction);
 
-const deleteButton = document.querySelector("#Delete");
 function deleteButtonAction() {
   if (lowerDisplay.textContent == "") {
     lowerDisplay.textContent = upperDisplay.textContent.slice(0, -1);
@@ -110,15 +106,31 @@ function deleteButtonAction() {
     lowerDisplay.textContent = lowerDisplay.textContent.slice(0, -1);
   }
 }
-deleteButton.addEventListener("click", deleteButtonAction);
 
-const body = document.querySelector("body");
-const buttons = document.querySelectorAll("button");
 function blurButtons() {
   buttons.forEach((button) => {
     button.blur();
   });
 }
+
+numberButtons.forEach((button) => {
+  button.addEventListener("click", displayNumber);
+});
+
+operatorButtons.forEach((button) => {
+  button.addEventListener("click", handleOperatorInput);
+});
+
+allClearButton.addEventListener("click", (e) => {
+  resetNumberAndOperatorVariables();
+  clearDisplays();
+});
+
+equalsButton.addEventListener("click", equalButtonAction);
+
+decimalButton.addEventListener("click", decimalButtonAction);
+
+deleteButton.addEventListener("click", deleteButtonAction);
 
 body.addEventListener("keydown", (e) => {
   let keyPressed = e.key;
@@ -142,24 +154,6 @@ body.addEventListener("keydown", (e) => {
   }
   if (["*", "-", "+", "/", "%"].includes(keyPressed)) {
     blurButtons();
-    if (
-      lowerDisplay.textContent != "" &&
-      (operator === undefined || operator == "")
-    ) {
-      firstNumber = parseFloat(lowerDisplay.textContent);
-      operator = keyPressed;
-      upperDisplay.textContent = `${lowerDisplay.textContent} ${operator}`;
-      lowerDisplay.textContent = "";
-    } else if (
-      !(operator === undefined || operator == "") &&
-      lowerDisplay.textContent != ""
-    ) {
-      firstNumber = parseFloat(upperDisplay.textContent.slice(0, -1));
-      secondNumber = parseFloat(lowerDisplay.textContent);
-      let result = operate(firstNumber, secondNumber, operator);
-      operator = keyPressed;
-      lowerDisplay.textContent = "";
-      upperDisplay.textContent = `${result} ${operator}`;
-    }
+    handleOperatorInput(e);
   }
 });
