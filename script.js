@@ -29,7 +29,9 @@ const operatorButtons = document.querySelectorAll(".operatorButton");
 
 for (button of numberButtons) {
   button.addEventListener("click", (e) => {
-    lowerDisplay.textContent += e.target.innerHTML;
+    if (lowerDisplay.textContent.length < 12) {
+      lowerDisplay.textContent += e.target.innerHTML;
+    }
   });
 }
 
@@ -108,11 +110,14 @@ function blurButtons() {
     button.blur();
   });
 }
+
 body.addEventListener("keydown", (e) => {
   console.log(e.key);
   if (e.key.match(/[0-9]/)) {
     blurButtons();
-    lowerDisplay.textContent += e.key;
+    if (lowerDisplay.textContent.length < 12) {
+      lowerDisplay.textContent += e.key;
+    }
   }
   if (e.key == "Enter") {
     blurButtons();
