@@ -25,13 +25,22 @@ const upperDisplay = document.querySelector(".upperDisplay");
 const lowerDisplay = document.querySelector(".lowerDisplay");
 const operatorButtons = document.querySelectorAll(".operatorButton");
 
-for (button of numberButtons) {
-  button.addEventListener("click", (e) => {
-    if (lowerDisplay.textContent.length < 12) {
-      lowerDisplay.textContent += e.target.innerHTML;
-    }
-  });
+function displayNumber(e) {
+  let numberToDisplay;
+  if (e instanceof KeyboardEvent) {
+    numberToDisplay = e.key;
+  } else if (e instanceof PointerEvent) {
+    let numberButtonValue = e.target.innerHTML;
+    numberToDisplay = numberButtonValue;
+  }
+  if (lowerDisplay.textContent.length < 12) {
+    lowerDisplay.textContent += numberToDisplay;
+  }
 }
+
+numberButtons.forEach((button) => {
+  button.addEventListener("click", displayNumber);
+});
 
 for (button of operatorButtons) {
   button.addEventListener("click", (e) => {
@@ -110,30 +119,31 @@ function blurButtons() {
 }
 
 body.addEventListener("keydown", (e) => {
-  console.log(e.key);
-  if (e.key.match(/[0-9]/)) {
+  let keyPressed = e.key;
+  console.log(keyPressed);
+
+  if (keyPressed.match(/[0-9]/)) {
     blurButtons();
-    if (lowerDisplay.textContent.length < 12) {
-      lowerDisplay.textContent += e.key;
-    }
+    displayNumber(e);
   }
-  if (e.key == "Enter") {
+
+  if (keyPressed == "Enter") {
     blurButtons();
     equalButtonAction(e);
   }
-  if (e.key == "Backspace") {
+  if (keyPressed == "Backspace") {
     blurButtons();
     deleteButtonAction();
   }
-  if (e.key == ".") {
+  if (keyPressed == ".") {
     decimalButtonAction();
   }
   if (
-    e.key == "*" ||
-    e.key == "-" ||
-    e.key == "+" ||
-    e.key == "/" ||
-    e.key == "%"
+    keyPressed == "*" ||
+    keyPressed == "-" ||
+    keyPressed == "+" ||
+    keyPressed == "/" ||
+    keyPressed == "%"
   ) {
     blurButtons();
     if (
@@ -141,7 +151,7 @@ body.addEventListener("keydown", (e) => {
       (operator === undefined || operator == "")
     ) {
       firstNumber = parseFloat(lowerDisplay.textContent);
-      operator = e.key;
+      operator = keyPressed;
       upperDisplay.textContent = `${lowerDisplay.textContent} ${operator}`;
       lowerDisplay.textContent = "";
     } else if (
@@ -151,7 +161,7 @@ body.addEventListener("keydown", (e) => {
       firstNumber = parseFloat(upperDisplay.textContent.slice(0, -1));
       secondNumber = parseFloat(lowerDisplay.textContent);
       let result = operate(firstNumber, secondNumber, operator);
-      operator = e.key;
+      operator = keyPressed;
       lowerDisplay.textContent = "";
       upperDisplay.textContent = `${result} ${operator}`;
     }
